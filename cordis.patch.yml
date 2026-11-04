@@ -1,0 +1,13 @@
+- id: directory-picker
+  name: '@deepseek-ai/dsh-host-directory-picker-auto'
+  disabled: true
+
+- insert:
+    - id: multi-workspace-directory-picker
+      name: '@deepseek-ai/dsh-host-directory-picker-native'
+
+    - id: multi-workspace
+      name: 'dsh-multi-workspace-host'
+
+    - id: ui-multi-workspace
+      name: 'dsh-multi-workspace-client'
