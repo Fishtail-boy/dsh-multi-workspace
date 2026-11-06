@@ -1,7 +1,7 @@
 {
   "name": "dsh-multi-workspace",
   "version": "0.1.0",
-  "description": "Add multiple project folders to one DeepSeek Harness workspace (fork with DSH 0.2.1 compatibility fixes)",
+  "description": "Add multiple project folders to one DeepSeek Harness workspace (fork of skylarking/dsh-plugin-workspace-multi, DSH 0.2.2 compatible)",
   "type": "module",
   "main": "lib/index.js",
   "types": "lib/types/index.d.ts",
@@ -20,8 +20,15 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/REPLACE_ME/dsh-multi-workspace.git"
+    "url": "git+https://github.com/Fishtail-boy/dsh-multi-workspace.git"
   },
+  "homepage": "https://github.com/Fishtail-boy/dsh-multi-workspace#readme",
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "workspace"
+  ],
   "scripts": {
     "build": "pnpm --filter dsh-multi-workspace-host run build && pnpm --filter dsh-multi-workspace-client run build && tsdown"
   },
@@ -36,6 +43,13 @@
       }
     }
   },
+  "engines": {
+    "dsh": ">=0.2.2-rc.1"
+  },
+  "dependencies": {
+    "dsh-multi-workspace-client": "workspace:^",
+    "dsh-multi-workspace-host": "workspace:^"
+  },
   "peerDependencies": {
     "@deepseek-ai/cordis": "*",
     "@deepseek-ai/dsh-host-directory-picker-native": "*"
@@ -43,8 +57,6 @@
   "devDependencies": {
     "@deepseek-ai/cordis": "4.0.5",
     "@deepseek-ai/dsh-host-directory-picker-native": "0.2.2-rc.1",
-    "dsh-multi-workspace-client": "file:./packages/client",
-    "dsh-multi-workspace-host": "file:./packages/host",
     "@types/node": "^22.20.1",
     "lightningcss": "^1.33.0",
     "rolldown": "1.2.16",
