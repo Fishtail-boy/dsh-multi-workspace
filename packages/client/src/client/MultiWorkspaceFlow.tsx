@@ -20,6 +20,8 @@ export interface MultiWorkspaceInjected {
   createWorkspace: (input: { path: string }) => Promise<WorkspaceView>
   renameWorkspace: (workspaceId: WorkspaceId, title: string) => Promise<void>
   deleteWorkspace: (workspaceId: WorkspaceId) => Promise<void>
+  /** Current workspaces, read from the Host service (the slot hook may be absent). */
+  listWorkspaces: () => WorkspaceView[]
   decorateWorkspaceMenu: boolean
 }
 
@@ -28,6 +30,71 @@ type MultiWorkspaceFlowProps = PropsRuntime<'sidebar.workspaces.directoryFlow'>
   & { t: Translate }
 
 const folderName = (path: string): string => path.split(/[\\/]/u).filter(Boolean).at(-1) ?? path
+
+/**
+ * Put an edit button on every workspace row, immediately before the Host's own
+ * ellipsis button. The row keeps the Host's classes so the control matches its
+ * neighbours, and only one node is inserted — unlike cloning menu rows, this
+ * cannot disturb a popover whose height is computed when it opens.
+ */
+function useWorkspaceRowAction({ enabled, label, resolve, open }: {
+  enabled: boolean
+  label: string
+  resolve: (rowText: string) => WorkspaceView | undefined
+  open: (workspace: WorkspaceView) => void
+}): void {
+  useEffect(() => {
+    if (!enabled) return
+    const decorate = (): void => {
+      const rows = document.querySelectorAll<HTMLElement>('[role="treeitem"][aria-expanded]')
+      for (const row of rows) {
+        if (row.querySelector('[data-multi-workspace-edit]') !== null) continue
+        const trigger = row.querySelector<HTMLButtonElement>('button[aria-haspopup], button[aria-expanded]')
+        if (trigger === null) continue
+        // Clone the Host's own ellipsis button so the control keeps its exact
+        // geometry and hit area, then swap the glyph and drop the menu wiring.
+        const button = trigger.cloneNode(true) as HTMLButtonElement
+        button.dataset.multiWorkspaceEdit = ''
+        button.removeAttribute('aria-haspopup')
+        button.removeAttribute('aria-expanded')
+        button.removeAttribute('aria-controls')
+        button.setAttribute('aria-label', label)
+        button.title = label
+        const svg = button.querySelector('svg')
+        if (svg !== null) {
+          // A fresh SVG: the cloned one carries the Host icon's own fill/stroke
+          // attributes, which would render the pencil as a solid blob.
+          const pencil = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+          pencil.setAttribute('width', svg.getAttribute('width') ?? '16')
+          pencil.setAttribute('height', svg.getAttribute('height') ?? '16')
+          pencil.setAttribute('viewBox', '0 0 24 24')
+          pencil.setAttribute('fill', 'none')
+          pencil.setAttribute('stroke', 'currentColor')
+          pencil.setAttribute('stroke-width', '2')
+          pencil.setAttribute('stroke-linecap', 'round')
+          pencil.setAttribute('stroke-linejoin', 'round')
+          pencil.setAttribute('aria-hidden', 'true')
+          pencil.innerHTML = '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>'
+          svg.replaceWith(pencil)
+        } else {
+          button.textContent = '✎'
+        }
+        // Capture phase: the row's own click handler (select/open) must not win.
+        button.addEventListener('click', (event) => {
+          event.preventDefault()
+          event.stopImmediatePropagation()
+          const target = resolve(row.textContent?.trim() ?? '')
+          if (target !== undefined) open(target)
+        }, true)
+        trigger.before(button)
+      }
+    }
+    decorate()
+    const observer = new MutationObserver(() => { decorate() })
+    observer.observe(document.body, { childList: true, subtree: true })
+    return () => { observer.disconnect() }
+  }, [enabled, label, resolve, open])
+}
 
 /** Add the plugin action to the Host-owned workspace menu until that menu gains a public item slot. */
 function useWorkspaceMenuEditor({ enabled, workspaces, label, createLabel, open, create }: {
@@ -48,23 +115,27 @@ function useWorkspaceMenuEditor({ enabled, workspaces, label, createLabel, open,
       if (button === null) return
       const row = button.closest<HTMLElement>('[role="treeitem"][aria-expanded]')
       if (row === null) return
-      const buttons = [...row.querySelectorAll('button')]
-      if (button !== buttons.at(-2)) return
-      const title = row.textContent?.trim()
-      pending.current = workspaces.find(workspace => workspace.title === title)
+      // The row's own label is the only stable handle: the trailing control
+      // count and the item labels change between DSH releases.
+      const text = row.textContent?.trim() ?? ''
+      pending.current = workspaces.find(workspace => workspace.title !== undefined && workspace.title === text)
+        ?? workspaces.find(workspace => workspace.title !== undefined && workspace.title !== '' && text.includes(workspace.title))
+        ?? workspaces.find(workspace => workspace.path !== undefined && text.includes(workspace.path))
     }
 
     const decorate = (menu: Element): void => {
       const workspace = pending.current
       if (workspace === undefined || menu.querySelector('[data-multi-workspace-edit]') !== null) return
       const items = [...menu.querySelectorAll<HTMLButtonElement>('[role="menuitem"]')]
-      if (items.length !== 2) return
-      const renameWrap = items[0]?.parentElement
-      const deleteWrap = items[1]?.parentElement
-      if (renameWrap === null || renameWrap === undefined || deleteWrap === null || deleteWrap === undefined) return
+      // The Host's menu is rename + delete today; a later release may add rows,
+      // so clone the first entry and anchor before the last (destructive) one.
+      if (items.length < 2) return
+      const templateWrap = items[0]?.parentElement
+      const anchorWrap = items[items.length - 1]?.parentElement
+      if (templateWrap === null || templateWrap === undefined || anchorWrap === null || anchorWrap === undefined) return
       /** Clone the Host's own rename row into a plugin-owned action. */
       const makeItem = (text: string, marker: string, run: () => void): HTMLElement | undefined => {
-        const wrap = renameWrap.cloneNode(true) as HTMLElement
+        const wrap = templateWrap.cloneNode(true) as HTMLElement
         const button = wrap.querySelector<HTMLButtonElement>('[role="menuitem"]')
         const labelEl = button?.querySelectorAll('span').item(1)
         if (button === null || button === undefined || labelEl === null || labelEl === undefined) return undefined
@@ -80,8 +151,8 @@ function useWorkspaceMenuEditor({ enabled, workspaces, label, createLabel, open,
       }
       const editWrap = makeItem(label, 'multiWorkspaceEdit', () => { open(workspace) })
       const createWrap = makeItem(createLabel, 'multiWorkspaceCreate', create)
-      if (editWrap !== undefined) deleteWrap.before(editWrap)
-      if (createWrap !== undefined) deleteWrap.before(createWrap)
+      if (editWrap !== undefined) anchorWrap.before(editWrap)
+      if (createWrap !== undefined) anchorWrap.before(createWrap)
       pending.current = undefined
     }
 
@@ -184,8 +255,43 @@ export function MultiWorkspaceFlow(props: MultiWorkspaceFlowProps) {
     })
   }, [props.decorateWorkspaceMenu])
 
-  useWorkspaceMenuEditor({
+  // Workspaces the row action resolves against, read from the Host service when
+  // the create surface opens.
+  const [known, setKnown] = useState<WorkspaceView[]>([])
+  useEffect(() => {
+    if (!props.open && !forcedCreate) return
+    try {
+      setKnown(props.listWorkspaces())
+    } catch (reason) {
+      setKnown([])
+      console.warn('[multi-workspace] could not list workspaces', reason)
+    }
+  }, [props.open, forcedCreate, props.listWorkspaces])
+  const rowWorkspaces = known.length > 0 ? known : workspaces
+
+  useWorkspaceRowAction({
     enabled: props.decorateWorkspaceMenu,
+    label: props.t('editProject'),
+    open: setEditTarget,
+    resolve: (text) => {
+      const pool = rowWorkspaces.length > 0 ? rowWorkspaces : (() => {
+        try {
+          return props.listWorkspaces()
+        } catch {
+          return [] as WorkspaceView[]
+        }
+      })()
+      return pool.find(workspace => workspace.title !== undefined && workspace.title !== '' && text.includes(workspace.title))
+        ?? pool.find(workspace => workspace.path !== undefined && text.includes(workspace.path))
+    },
+  })
+
+  useWorkspaceMenuEditor({
+    // Disabled: cloning rows into the Host's workspace menu corrupts its layout
+    // on DSH 0.2.2 (the menu computes its height when it opens). The create flow
+    // is reached through the `+` button, which owns the directory-flow slot, so
+    // the plugin stays usable without touching the Host's menu.
+    enabled: false,
     workspaces,
     label: props.t('editProject'),
     createLabel: props.t('newProject'),
@@ -323,6 +429,7 @@ export function MultiWorkspaceFlow(props: MultiWorkspaceFlowProps) {
               onAdd={() => { addFolder(setCreatePaths, path => { setCreatePrimaryPath(current => current ?? path) }) }}
             />
           </section>
+
           {error !== undefined && <div className={css.error} role="alert">{error}</div>}
         </div>
       </Modal>

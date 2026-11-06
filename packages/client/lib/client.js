@@ -4928,7 +4928,7 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
 			settle?.(null);
 		}
 		// \0dsh-css:C:\Users\lenovo\Documents\dsh-multi-workspace\packages\client\src\client\MultiWorkspaceFlow.module.css.mjs
-		const css = ".SD_GaW_dialog{width:min(700px,100vw - 48px);max-height:calc(100vh - 48px)}.SD_GaW_content{min-height:0;overflow-y:auto}.SD_GaW_body{flex-direction:column;gap:24px;min-width:0;display:flex}.SD_GaW_nameField{border:1px solid var(--dsw-alias-border-l2);min-width:0;color:var(--dsw-alias-label-secondary);border-radius:12px;grid-template-columns:44px minmax(0,1fr);align-items:center;display:grid;overflow:hidden}.SD_GaW_nameField>svg{justify-self:center}.SD_GaW_nameField input{border:0;border-left:1px solid var(--dsw-alias-border-l2);width:100%;min-width:0;height:48px;color:var(--dsw-alias-label-primary);font:inherit;background:0 0;outline:none;padding:0 14px}.SD_GaW_nameField input::placeholder{color:var(--dsw-alias-label-tertiary)}.SD_GaW_folderSection{flex-direction:column;gap:12px;min-width:0;display:flex}.SD_GaW_folderSection h3{color:var(--dsw-alias-label-primary);margin:0;font-size:14px;font-weight:500;line-height:22px}.SD_GaW_empty,.SD_GaW_status{border:1px solid var(--dsw-alias-border-l2);min-height:170px;color:var(--dsw-alias-label-secondary);background:0 0;border-radius:12px;flex-direction:column;justify-content:center;align-items:center;gap:10px;display:flex}.SD_GaW_empty{cursor:pointer;width:100%;font:inherit}.SD_GaW_empty:hover:not(:disabled),.SD_GaW_addRow:hover:not(:disabled){background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-primary)}.SD_GaW_empty:disabled,.SD_GaW_addRow:disabled,.SD_GaW_remove:disabled,.SD_GaW_danger:disabled{cursor:not-allowed;opacity:.4}.SD_GaW_folderList{border:1px solid var(--dsw-alias-border-l2);border-radius:12px;flex-direction:column;min-width:0;display:flex;overflow:hidden}.SD_GaW_folderRow{min-height:58px;color:var(--dsw-alias-label-secondary);grid-template-columns:20px minmax(0,1fr) auto 28px;align-items:center;gap:10px;padding:8px 14px;display:grid}.SD_GaW_folderRow+.SD_GaW_folderRow,.SD_GaW_addRow{border-top:1px solid var(--dsw-alias-border-l2)}.SD_GaW_folderCopy{flex-direction:column;gap:2px;min-width:0;display:flex}.SD_GaW_folderCopy strong,.SD_GaW_folderCopy span{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.SD_GaW_folderCopy strong{color:var(--dsw-alias-label-primary);font-size:14px;font-weight:500}.SD_GaW_folderCopy span{font-size:11px}.SD_GaW_primary{border:1px solid var(--dsw-alias-border-l2);color:var(--dsw-alias-label-secondary);border-radius:14px;padding:3px 9px;font-size:12px}.SD_GaW_setPrimary{visibility:hidden;opacity:0;pointer-events:none;transition:opacity .12s}.SD_GaW_folderRow:hover .SD_GaW_setPrimary,.SD_GaW_folderRow:focus-within .SD_GaW_setPrimary{visibility:visible;opacity:1;pointer-events:auto}.SD_GaW_remove,.SD_GaW_removePlaceholder{width:28px;height:28px}.SD_GaW_remove{color:var(--dsw-alias-label-secondary);cursor:pointer;background:0 0;border:0;place-items:center;display:grid}.SD_GaW_remove:hover:not(:disabled){color:var(--dsw-alias-label-primary)}.SD_GaW_addRow{min-height:54px;color:var(--dsw-alias-label-primary);cursor:pointer;font:inherit;background:0 0;border-bottom:0;border-left:0;border-right:0;align-items:center;gap:10px;padding:0 14px;display:flex}.SD_GaW_editFooter{justify-content:space-between;align-items:center;gap:16px;width:100%;display:flex}.SD_GaW_footerActions{align-items:center;gap:8px;display:flex}.SD_GaW_danger{background:color-mix(in srgb, var(--dsw-alias-state-error-primary) 12%, transparent);min-height:36px;color:var(--dsw-alias-state-error-primary);cursor:pointer;font:inherit;border:0;border-radius:10px;padding:0 14px}.SD_GaW_error{color:var(--dsw-alias-state-error-primary);font-size:12px}@media (hover:none){.SD_GaW_setPrimary{visibility:visible;opacity:1;pointer-events:auto}}@media (width<=560px){.SD_GaW_dialog{width:calc(100vw - 24px);max-height:calc(100vh - 24px)}.SD_GaW_folderRow{grid-template-columns:20px minmax(0,1fr) 28px}.SD_GaW_folderRow>:nth-child(3){grid-column:2/4;justify-self:start}.SD_GaW_folderRow>:nth-child(4){grid-area:1/3}.SD_GaW_editFooter{flex-direction:column-reverse;align-items:stretch}.SD_GaW_footerActions{justify-content:flex-end}}";
+		const css = ".SD_GaW_dialog{width:min(700px,100vw - 48px);max-height:calc(100vh - 48px)}.SD_GaW_content{min-height:0;overflow-y:auto}.SD_GaW_body{flex-direction:column;gap:24px;min-width:0;display:flex}.SD_GaW_nameField{border:1px solid var(--dsw-alias-border-l2);min-width:0;color:var(--dsw-alias-label-secondary);border-radius:12px;grid-template-columns:44px minmax(0,1fr);align-items:center;display:grid;overflow:hidden}.SD_GaW_nameField>svg{justify-self:center}.SD_GaW_nameField input{border:0;border-left:1px solid var(--dsw-alias-border-l2);width:100%;min-width:0;height:48px;color:var(--dsw-alias-label-primary);font:inherit;background:0 0;outline:none;padding:0 14px}.SD_GaW_nameField input::placeholder{color:var(--dsw-alias-label-tertiary)}.SD_GaW_folderSection{flex-direction:column;gap:12px;min-width:0;display:flex}.SD_GaW_folderSection h3{color:var(--dsw-alias-label-primary);margin:0;font-size:14px;font-weight:500;line-height:22px}.SD_GaW_empty,.SD_GaW_status{border:1px solid var(--dsw-alias-border-l2);min-height:170px;color:var(--dsw-alias-label-secondary);background:0 0;border-radius:12px;flex-direction:column;justify-content:center;align-items:center;gap:10px;display:flex}.SD_GaW_empty{cursor:pointer;width:100%;font:inherit}.SD_GaW_empty:hover:not(:disabled),.SD_GaW_addRow:hover:not(:disabled){background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-primary)}.SD_GaW_empty:disabled,.SD_GaW_addRow:disabled,.SD_GaW_remove:disabled,.SD_GaW_danger:disabled{cursor:not-allowed;opacity:.4}.SD_GaW_folderList{border:1px solid var(--dsw-alias-border-l2);border-radius:12px;flex-direction:column;min-width:0;display:flex;overflow:hidden}.SD_GaW_folderRow{min-height:58px;color:var(--dsw-alias-label-secondary);grid-template-columns:20px minmax(0,1fr) auto 28px;align-items:center;gap:10px;padding:8px 14px;display:grid}.SD_GaW_folderRow+.SD_GaW_folderRow,.SD_GaW_addRow{border-top:1px solid var(--dsw-alias-border-l2)}.SD_GaW_folderCopy{flex-direction:column;gap:2px;min-width:0;display:flex}.SD_GaW_folderCopy strong,.SD_GaW_folderCopy span{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.SD_GaW_folderCopy strong{color:var(--dsw-alias-label-primary);font-size:14px;font-weight:500}.SD_GaW_folderCopy span{font-size:11px}.SD_GaW_primary{border:1px solid var(--dsw-alias-border-l2);color:var(--dsw-alias-label-secondary);border-radius:14px;padding:3px 9px;font-size:12px}.SD_GaW_setPrimary{visibility:hidden;opacity:0;pointer-events:none;transition:opacity .12s}.SD_GaW_folderRow:hover .SD_GaW_setPrimary,.SD_GaW_folderRow:focus-within .SD_GaW_setPrimary{visibility:visible;opacity:1;pointer-events:auto}.SD_GaW_remove,.SD_GaW_removePlaceholder{width:28px;height:28px}.SD_GaW_remove{color:var(--dsw-alias-label-secondary);cursor:pointer;background:0 0;border:0;place-items:center;display:grid}.SD_GaW_remove:hover:not(:disabled){color:var(--dsw-alias-label-primary)}.SD_GaW_addRow{min-height:54px;color:var(--dsw-alias-label-primary);cursor:pointer;font:inherit;background:0 0;border-bottom:0;border-left:0;border-right:0;align-items:center;gap:10px;padding:0 14px;display:flex}.SD_GaW_editFooter{justify-content:space-between;align-items:center;gap:16px;width:100%;display:flex}.SD_GaW_footerActions{align-items:center;gap:8px;display:flex}.SD_GaW_danger{background:color-mix(in srgb, var(--dsw-alias-state-error-primary) 12%, transparent);min-height:36px;color:var(--dsw-alias-state-error-primary);cursor:pointer;font:inherit;border:0;border-radius:10px;padding:0 14px}.SD_GaW_error{color:var(--dsw-alias-state-error-primary);font-size:12px}@media (hover:none){.SD_GaW_setPrimary{visibility:visible;opacity:1;pointer-events:auto}}@media (width<=560px){.SD_GaW_dialog{width:calc(100vw - 24px);max-height:calc(100vh - 24px)}.SD_GaW_folderRow{grid-template-columns:20px minmax(0,1fr) 28px}.SD_GaW_folderRow>:nth-child(3){grid-column:2/4;justify-self:start}.SD_GaW_folderRow>:nth-child(4){grid-area:1/3}.SD_GaW_editFooter{flex-direction:column-reverse;align-items:stretch}.SD_GaW_footerActions{justify-content:flex-end}}.SD_GaW_existingRow{color:var(--dsw-alias-label-secondary);align-items:center;gap:8px;font-size:12px;display:flex}.SD_GaW_existingSelect{border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-l2,#26262b);max-width:240px;color:var(--dsw-alias-label-primary,#e8e8ea);border-radius:8px;padding:4px 8px;font-size:12px}.SD_GaW_existingSelect option{background:var(--dsw-alias-bg-l2,#26262b);color:var(--dsw-alias-label-primary,#e8e8ea)}";
 		const tagId = "dsh-multi-workspace-client/MultiWorkspaceFlow.module.css";
 		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId) + "]") === null) {
 			const tag = document.createElement("style");
@@ -4946,6 +4946,8 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
 			"editFooter": "SD_GaW_editFooter",
 			"empty": "SD_GaW_empty",
 			"error": "SD_GaW_error",
+			"existingRow": "SD_GaW_existingRow",
+			"existingSelect": "SD_GaW_existingSelect",
 			"folderCopy": "SD_GaW_folderCopy",
 			"folderList": "SD_GaW_folderList",
 			"folderRow": "SD_GaW_folderRow",
@@ -4960,6 +4962,70 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
 		};
 		// src/client/MultiWorkspaceFlow.tsx
 		const folderName = (path) => path.split(/[\\/]/u).filter(Boolean).at(-1) ?? path;
+		/**
+		* Put an edit button on every workspace row, immediately before the Host's own
+		* ellipsis button. The row keeps the Host's classes so the control matches its
+		* neighbours, and only one node is inserted — unlike cloning menu rows, this
+		* cannot disturb a popover whose height is computed when it opens.
+		*/
+		function useWorkspaceRowAction({ enabled, label, resolve, open }) {
+			(0, react.useEffect)(() => {
+				if (!enabled) return;
+				const decorate = () => {
+					const rows = document.querySelectorAll("[role=\"treeitem\"][aria-expanded]");
+					for (const row of rows) {
+						if (row.querySelector("[data-multi-workspace-edit]") !== null) continue;
+						const trigger = row.querySelector("button[aria-haspopup], button[aria-expanded]");
+						if (trigger === null) continue;
+						const button = trigger.cloneNode(true);
+						button.dataset.multiWorkspaceEdit = "";
+						button.removeAttribute("aria-haspopup");
+						button.removeAttribute("aria-expanded");
+						button.removeAttribute("aria-controls");
+						button.setAttribute("aria-label", label);
+						button.title = label;
+						const svg = button.querySelector("svg");
+						if (svg !== null) {
+							const pencil = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+							pencil.setAttribute("width", svg.getAttribute("width") ?? "16");
+							pencil.setAttribute("height", svg.getAttribute("height") ?? "16");
+							pencil.setAttribute("viewBox", "0 0 24 24");
+							pencil.setAttribute("fill", "none");
+							pencil.setAttribute("stroke", "currentColor");
+							pencil.setAttribute("stroke-width", "2");
+							pencil.setAttribute("stroke-linecap", "round");
+							pencil.setAttribute("stroke-linejoin", "round");
+							pencil.setAttribute("aria-hidden", "true");
+							pencil.innerHTML = "<path d=\"M12 20h9\"/><path d=\"M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z\"/>";
+							svg.replaceWith(pencil);
+						} else button.textContent = "✎";
+						button.addEventListener("click", (event) => {
+							event.preventDefault();
+							event.stopImmediatePropagation();
+							const target = resolve(row.textContent?.trim() ?? "");
+							if (target !== void 0) open(target);
+						}, true);
+						trigger.before(button);
+					}
+				};
+				decorate();
+				const observer = new MutationObserver(() => {
+					decorate();
+				});
+				observer.observe(document.body, {
+					childList: true,
+					subtree: true
+				});
+				return () => {
+					observer.disconnect();
+				};
+			}, [
+				enabled,
+				label,
+				resolve,
+				open
+			]);
+		}
 		/** Add the plugin action to the Host-owned workspace menu until that menu gains a public item slot. */
 		function useWorkspaceMenuEditor({ enabled, workspaces, label, createLabel, open, create }) {
 			const pending = (0, react.useRef)();
@@ -4971,21 +5037,20 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
 					if (button === null) return;
 					const row = button.closest("[role=\"treeitem\"][aria-expanded]");
 					if (row === null) return;
-					if (button !== [...row.querySelectorAll("button")].at(-2)) return;
-					const title = row.textContent?.trim();
-					pending.current = workspaces.find((workspace) => workspace.title === title);
+					const text = row.textContent?.trim() ?? "";
+					pending.current = workspaces.find((workspace) => workspace.title !== void 0 && workspace.title === text) ?? workspaces.find((workspace) => workspace.title !== void 0 && workspace.title !== "" && text.includes(workspace.title)) ?? workspaces.find((workspace) => workspace.path !== void 0 && text.includes(workspace.path));
 				};
 				const decorate = (menu) => {
 					const workspace = pending.current;
 					if (workspace === void 0 || menu.querySelector("[data-multi-workspace-edit]") !== null) return;
 					const items = [...menu.querySelectorAll("[role=\"menuitem\"]")];
-					if (items.length !== 2) return;
-					const renameWrap = items[0]?.parentElement;
-					const deleteWrap = items[1]?.parentElement;
-					if (renameWrap === null || renameWrap === void 0 || deleteWrap === null || deleteWrap === void 0) return;
+					if (items.length < 2) return;
+					const templateWrap = items[0]?.parentElement;
+					const anchorWrap = items[items.length - 1]?.parentElement;
+					if (templateWrap === null || templateWrap === void 0 || anchorWrap === null || anchorWrap === void 0) return;
 					/** Clone the Host's own rename row into a plugin-owned action. */
 					const makeItem = (text, marker, run) => {
-						const wrap = renameWrap.cloneNode(true);
+						const wrap = templateWrap.cloneNode(true);
 						const button = wrap.querySelector("[role=\"menuitem\"]");
 						const labelEl = button?.querySelectorAll("span").item(1);
 						if (button === null || button === void 0 || labelEl === null || labelEl === void 0) return void 0;
@@ -5006,8 +5071,8 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
 						open(workspace);
 					});
 					const createWrap = makeItem(createLabel, "multiWorkspaceCreate", create);
-					if (editWrap !== void 0) deleteWrap.before(editWrap);
-					if (createWrap !== void 0) deleteWrap.before(createWrap);
+					if (editWrap !== void 0) anchorWrap.before(editWrap);
+					if (createWrap !== void 0) anchorWrap.before(createWrap);
 					pending.current = void 0;
 				};
 				const observer = new MutationObserver((records) => {
@@ -5112,8 +5177,38 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
 					setForcedCreate(true);
 				});
 			}, [props.decorateWorkspaceMenu]);
-			useWorkspaceMenuEditor({
+			const [known, setKnown] = (0, react.useState)([]);
+			(0, react.useEffect)(() => {
+				if (!props.open && !forcedCreate) return;
+				try {
+					setKnown(props.listWorkspaces());
+				} catch (reason) {
+					setKnown([]);
+					console.warn("[multi-workspace] could not list workspaces", reason);
+				}
+			}, [
+				props.open,
+				forcedCreate,
+				props.listWorkspaces
+			]);
+			const rowWorkspaces = known.length > 0 ? known : workspaces;
+			useWorkspaceRowAction({
 				enabled: props.decorateWorkspaceMenu,
+				label: props.t("editProject"),
+				open: setEditTarget,
+				resolve: (text) => {
+					const pool = rowWorkspaces.length > 0 ? rowWorkspaces : (() => {
+						try {
+							return props.listWorkspaces();
+						} catch {
+							return [];
+						}
+					})();
+					return pool.find((workspace) => workspace.title !== void 0 && workspace.title !== "" && text.includes(workspace.title)) ?? pool.find((workspace) => workspace.path !== void 0 && text.includes(workspace.path));
+				}
+			});
+			useWorkspaceMenuEditor({
+				enabled: false,
 				workspaces,
 				label: props.t("editProject"),
 				createLabel: props.t("newProject"),
@@ -5371,7 +5466,7 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
 			folders: "源文件夹",
 			add: "添加文件夹",
 			remove: "移除文件夹",
-			empty: "添加 Codex 可读取和编辑的文件夹",
+			empty: "添加 DSH 可读取和编辑的文件夹",
 			cancel: "取消",
 			create: "创建项目",
 			creating: "正在创建…",
@@ -5382,7 +5477,9 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
 			setPrimary: "设为主要",
 			removeProject: "移除本地项目",
 			error: "无法更新项目",
-			newProject: "新建多文件夹项目…"
+			newProject: "新建多文件夹项目…",
+			editExisting: "编辑已有项目",
+			chooseProject: "选择项目…"
 		};
 		const en = {
 			createTitle: "Create project",
@@ -5392,7 +5489,7 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
 			folders: "Source folders",
 			add: "Add folder",
 			remove: "Remove folder",
-			empty: "Add folders Codex can read and edit",
+			empty: "Add folders DSH can read and edit",
 			cancel: "Cancel",
 			create: "Create project",
 			creating: "Creating…",
@@ -5403,7 +5500,9 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
 			setPrimary: "Set as primary",
 			removeProject: "Remove local project",
 			error: "Could not update project",
-			newProject: "New multi-folder project…"
+			newProject: "New multi-folder project…",
+			editExisting: "Edit an existing project",
+			chooseProject: "Choose a project…"
 		};
 		// src/client/index.ts
 		const NS = "multi-workspace";
@@ -5472,6 +5571,9 @@ Set the \`cycles\` parameter to \`"ref"\` to resolve cyclical schemas with defs.
 				},
 				deleteWorkspace: async (workspaceId) => {
 					await ctx.workspaces.delete(workspaceId);
+				},
+				listWorkspaces: () => {
+					return ctx.workspaces.list?.getSnapshot?.().items ?? [];
 				},
 				decorateWorkspaceMenu
 			});

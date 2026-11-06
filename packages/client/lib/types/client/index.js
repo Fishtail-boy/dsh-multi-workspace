@@ -62,6 +62,12 @@ function registerMultiWorkspace(ctx) {
         createWorkspace: input => ctx.workspaces.create(input),
         renameWorkspace: async (workspaceId, title) => { await ctx.workspaces.rename(workspaceId, title); },
         deleteWorkspace: async (workspaceId) => { await ctx.workspaces.delete(workspaceId); },
+        // The slot hook `useWorkspaces` is not declared on every DSH release, so the
+        // dialog reads the list straight from the service instead.
+        listWorkspaces: () => {
+            const store = ctx.workspaces.list;
+            return (store?.getSnapshot?.().items ?? []);
+        },
         decorateWorkspaceMenu,
     });
     // The built-in single-folder flow registers into both holes at the default

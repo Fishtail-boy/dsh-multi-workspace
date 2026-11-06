@@ -13,6 +13,8 @@ export interface MultiWorkspaceInjected {
     }) => Promise<WorkspaceView>;
     renameWorkspace: (workspaceId: WorkspaceId, title: string) => Promise<void>;
     deleteWorkspace: (workspaceId: WorkspaceId) => Promise<void>;
+    /** Current workspaces, read from the Host service (the slot hook may be absent). */
+    listWorkspaces: () => WorkspaceView[];
     decorateWorkspaceMenu: boolean;
 }
 type MultiWorkspaceFlowProps = PropsRuntime<'sidebar.workspaces.directoryFlow'> & MultiWorkspaceInjected & {
