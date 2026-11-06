@@ -40,6 +40,10 @@
     "@deepseek-ai/cordis": "*",
     "@deepseek-ai/dsh-host-directory-picker-native": "*"
   },
+  "dependencies": {
+    "dsh-multi-workspace-client": "github:Fishtail-boy/dsh-multi-workspace#path:/packages/client",
+    "dsh-multi-workspace-host": "github:Fishtail-boy/dsh-multi-workspace#path:/packages/host"
+  },
   "devDependencies": {
     "@deepseek-ai/cordis": "4.0.5",
     "@deepseek-ai/dsh-host-directory-picker-native": "0.2.2-rc.1",
