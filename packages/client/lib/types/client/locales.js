@@ -17,6 +17,7 @@ export const zh = {
     setPrimary: '设为主要',
     removeProject: '移除本地项目',
     error: '无法更新项目',
+    newProject: '新建多文件夹项目…',
 };
 export const en = {
     createTitle: 'Create project', editTitle: 'Edit project', editProject: 'Edit project', name: 'Project name',
@@ -24,5 +25,6 @@ export const en = {
     empty: 'Add folders Codex can read and edit', cancel: 'Cancel', create: 'Create project', creating: 'Creating…',
     save: 'Save changes', saving: 'Saving…', loading: 'Loading source folders…', primary: 'Primary',
     setPrimary: 'Set as primary', removeProject: 'Remove local project', error: 'Could not update project',
+    newProject: 'New multi-folder project…',
 };
 //# sourceMappingURL=locales.js.map

@@ -26,6 +26,15 @@ export declare class MultiWorkspaceRegistry extends Service {
     private load;
     private normalizeDirectory;
     register(workspaceId: string, paths: string[], primaryPath: string): Promise<MultiWorkspaceRecord>;
+    /**
+     * Point the native workspace at the chosen primary folder.
+     *
+     * The workspace registry renamed this operation across DSH releases, and a
+     * missing setter must not fail the save: the extra-folder mapping and the
+     * model context are the parts that matter, so an unsettable path degrades to
+     * "the native root stays the primary folder".
+     */
+    private setWorkspacePath;
     remove(workspaceId: string): Promise<boolean>;
     get(workspaceId: string): MultiWorkspaceRecord | null;
     private recordForSession;

@@ -113,7 +113,7 @@ var MultiWorkspaceRegistry = class extends Service {
 			primaryPath: primary,
 			updatedAt: (/* @__PURE__ */ new Date()).toISOString()
 		};
-		await this.workspaceRegistry.setPath(workspaceId, primary);
+		await this.setWorkspacePath(workspaceId, primary);
 		this.records.set(workspaceId, record);
 		try {
 			await this.persist();
@@ -121,13 +121,38 @@ var MultiWorkspaceRegistry = class extends Service {
 			if (previous === void 0) this.records.delete(workspaceId);
 			else this.records.set(workspaceId, previous);
 			try {
-				await this.workspaceRegistry.setPath(workspaceId, previousPath);
+				await this.setWorkspacePath(workspaceId, previousPath);
 			} catch (rollbackError) {
 				throw new AggregateError([error, rollbackError], `multi-workspace: project '${workspaceId}' save and primary-folder rollback both failed`);
 			}
 			throw error;
 		}
 		return record;
+	}
+	/**
+	* Point the native workspace at the chosen primary folder.
+	*
+	* The workspace registry renamed this operation across DSH releases, and a
+	* missing setter must not fail the save: the extra-folder mapping and the
+	* model context are the parts that matter, so an unsettable path degrades to
+	* "the native root stays the primary folder".
+	*/
+	async setWorkspacePath(workspaceId, path) {
+		const registry = this.workspaceRegistry;
+		for (const method of [
+			"setPath",
+			"updatePath",
+			"setRootPath",
+			"movePath",
+			"setPrimaryPath"
+		]) {
+			const candidate = registry[method];
+			if (typeof candidate === "function") {
+				await candidate.call(registry, workspaceId, path);
+				return;
+			}
+		}
+		console.info("[mws-host] workspaceRegistry exposes no path setter; keeping the native root as primary");
 	}
 	async remove(workspaceId) {
 		const removed = this.records.delete(workspaceId);
@@ -176,6 +201,10 @@ var MultiWorkspaceRegistry = class extends Service {
 	}
 	installPrompt() {
 		this.ctx.on("agent/pre-step", (payload, next) => this.injectContext(payload, next), { prepend: true });
+		if (typeof this.sandboxPolicy.registerAdditionalWritableRoots !== "function") {
+			console.info("[mws-host] sandboxPolicy has no registerAdditionalWritableRoots; extra folders stay non-writable");
+			return;
+		}
 		this.ctx.effect(() => this.sandboxPolicy.registerAdditionalWritableRoots((session) => this.additionalWritableRoots(session)), "multi-workspace.additionalWritableRoots");
 	}
 };
@@ -252,8 +281,16 @@ const inject = ["workspaceRegistry", "sandboxPolicy"];
 function apply(ctx) {
 	ctx.plugin(MultiWorkspaceRegistry);
 	ctx.inject(["multiWorkspaceRegistry"], (ready) => {
-		ready.multiWorkspaceRegistry.installPrompt();
-		ready.plugin(MultiWorkspaceGateway);
+		try {
+			ready.multiWorkspaceRegistry.installPrompt();
+		} catch (error) {
+			console.error("[mws-host] installPrompt failed", error);
+		}
+		try {
+			ready.plugin(MultiWorkspaceGateway);
+		} catch (error) {
+			console.error("[mws-host] gateway mount failed", error);
+		}
 	});
 }
 export { MultiWorkspaceGateway, MultiWorkspaceRegistry, apply, apply as default, inject };

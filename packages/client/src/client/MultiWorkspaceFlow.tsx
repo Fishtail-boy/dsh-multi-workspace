@@ -6,6 +6,7 @@ import type { PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
 import type { WorkspaceId, WorkspaceView } from '@deepseek-ai/dsh-client-runtime/client'
 import type {} from '@deepseek-ai/dsh-client-ui-workspace/client'
 import type { MultiWorkspaceRecord } from 'dsh-multi-workspace-host/types'
+import { settleCreateFlow, subscribeCreateFlow } from './flowBridge.ts'
 import type { MultiWorkspaceKey } from './locales.ts'
 import css from './MultiWorkspaceFlow.module.css'
 
@@ -29,11 +30,13 @@ type MultiWorkspaceFlowProps = PropsRuntime<'sidebar.workspaces.directoryFlow'>
 const folderName = (path: string): string => path.split(/[\\/]/u).filter(Boolean).at(-1) ?? path
 
 /** Add the plugin action to the Host-owned workspace menu until that menu gains a public item slot. */
-function useWorkspaceMenuEditor({ enabled, workspaces, label, open }: {
+function useWorkspaceMenuEditor({ enabled, workspaces, label, createLabel, open, create }: {
   enabled: boolean
   workspaces: readonly WorkspaceView[]
   label: string
+  createLabel: string
   open: (workspace: WorkspaceView) => void
+  create: () => void
 }): void {
   const pending = useRef<WorkspaceView>()
 
@@ -59,19 +62,26 @@ function useWorkspaceMenuEditor({ enabled, workspaces, label, open }: {
       const renameWrap = items[0]?.parentElement
       const deleteWrap = items[1]?.parentElement
       if (renameWrap === null || renameWrap === undefined || deleteWrap === null || deleteWrap === undefined) return
-      const editWrap = renameWrap.cloneNode(true) as HTMLElement
-      const editButton = editWrap.querySelector<HTMLButtonElement>('[role="menuitem"]')
-      const editLabel = editButton?.querySelectorAll('span').item(1)
-      if (editButton === null || editButton === undefined || editLabel === null || editLabel === undefined) return
-      editWrap.dataset.multiWorkspaceEdit = ''
-      editLabel.textContent = label
-      editButton.addEventListener('click', (event) => {
-        event.preventDefault()
-        event.stopImmediatePropagation()
-        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
-        open(workspace)
-      })
-      deleteWrap.before(editWrap)
+      /** Clone the Host's own rename row into a plugin-owned action. */
+      const makeItem = (text: string, marker: string, run: () => void): HTMLElement | undefined => {
+        const wrap = renameWrap.cloneNode(true) as HTMLElement
+        const button = wrap.querySelector<HTMLButtonElement>('[role="menuitem"]')
+        const labelEl = button?.querySelectorAll('span').item(1)
+        if (button === null || button === undefined || labelEl === null || labelEl === undefined) return undefined
+        wrap.dataset[marker] = ''
+        labelEl.textContent = text
+        button.addEventListener('click', (event) => {
+          event.preventDefault()
+          event.stopImmediatePropagation()
+          document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
+          run()
+        })
+        return wrap
+      }
+      const editWrap = makeItem(label, 'multiWorkspaceEdit', () => { open(workspace) })
+      const createWrap = makeItem(createLabel, 'multiWorkspaceCreate', create)
+      if (editWrap !== undefined) deleteWrap.before(editWrap)
+      if (createWrap !== undefined) deleteWrap.before(createWrap)
       pending.current = undefined
     }
 
@@ -138,7 +148,13 @@ function FolderList({ paths, primaryPath, busy, removable, primarySelectable, t,
 
 /** Create multi-folder projects and edit an existing project from its row menu. */
 export function MultiWorkspaceFlow(props: MultiWorkspaceFlowProps) {
-  const workspaces = props.useWorkspaces((state: { items: WorkspaceView[] }) => state.items)
+  // The slot may not declare the `useWorkspaces` hook in every DSH release.
+  // A missing hook must degrade to an empty list instead of crashing the
+  // render, which would retire this entry from the slot for good.
+  const useWorkspaces = (typeof props.useWorkspaces === 'function'
+    ? props.useWorkspaces
+    : () => [] as WorkspaceView[]) as (selector: (state: { items: WorkspaceView[] }) => WorkspaceView[]) => WorkspaceView[]
+  const workspaces = useWorkspaces((state: { items: WorkspaceView[] }) => state.items)
   const [createPaths, setCreatePaths] = useState<string[]>([])
   const [createTitle, setCreateTitle] = useState('')
   const [createPrimaryPath, setCreatePrimaryPath] = useState<string>()
@@ -150,13 +166,37 @@ export function MultiWorkspaceFlow(props: MultiWorkspaceFlowProps) {
   const [loading, setLoading] = useState(false)
   const [committing, setCommitting] = useState(false)
   const [error, setError] = useState<string>()
+  const [forcedCreate, setForcedCreate] = useState(false)
   const openRef = useRef(false)
+
+  // The wrapped `pickDirectory` parks a request here; opening the create dialog
+  // is how the built-in add-workspace action reaches the multi-folder editor.
+  // Only the sidebar instance owns it, so the hero instance cannot open a
+  // second dialog for the same request.
+  useEffect(() => {
+    if (!props.decorateWorkspaceMenu) return undefined
+    return subscribeCreateFlow(() => {
+      setCreatePaths([])
+      setCreateTitle('')
+      setCreatePrimaryPath(undefined)
+      setError(undefined)
+      setForcedCreate(true)
+    })
+  }, [props.decorateWorkspaceMenu])
 
   useWorkspaceMenuEditor({
     enabled: props.decorateWorkspaceMenu,
     workspaces,
     label: props.t('editProject'),
+    createLabel: props.t('newProject'),
     open: setEditTarget,
+    create: () => {
+      setCreatePaths([])
+      setCreateTitle('')
+      setCreatePrimaryPath(undefined)
+      setError(undefined)
+      setForcedCreate(true)
+    },
   })
 
   useEffect(() => {
@@ -213,6 +253,10 @@ export function MultiWorkspaceFlow(props: MultiWorkspaceFlowProps) {
       const title = createTitle.trim()
       if (title !== '' && title !== workspace.title) await props.renameWorkspace(workspace.workspaceId, title)
       props.onPicked(createPrimaryPath)
+      if (forcedCreate) {
+        settleCreateFlow()
+        setForcedCreate(false)
+      }
     }).catch(reason => { setError(reason instanceof Error ? reason.message : String(reason)) })
       .finally(() => { setCommitting(false) })
   }
@@ -241,18 +285,26 @@ export function MultiWorkspaceFlow(props: MultiWorkspaceFlowProps) {
 
   const busy = picking || loading || committing || props.busy
   const closeEditor = (): void => { if (!committing) setEditTarget(undefined) }
+  /** Close the create dialog and release the parked `pickDirectory` call. */
+  const cancelCreate = (): void => {
+    if (forcedCreate) {
+      settleCreateFlow()
+      setForcedCreate(false)
+    }
+    props.onCancel()
+  }
 
   return (
     <>
       <Modal
-        open={props.open}
-        onClose={props.onCancel}
+        open={props.open || forcedCreate}
+        onClose={cancelCreate}
         closeLabel={props.t('cancel')}
         title={props.t('createTitle')}
         className={css.dialog!}
         contentClassName={css.content!}
         footer={<>
-          <Button variant="ghost" onClick={props.onCancel}>{props.t('cancel')}</Button>
+          <Button variant="ghost" onClick={cancelCreate}>{props.t('cancel')}</Button>
           <Button variant="primary" disabled={busy || createPaths.length === 0 || createPrimaryPath === undefined} onClick={create}>
             {committing ? props.t('creating') : props.t('create')}
           </Button>

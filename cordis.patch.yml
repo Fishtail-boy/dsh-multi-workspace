@@ -1,11 +1,11 @@
-- id: directory-picker
-  name: '@deepseek-ai/dsh-host-directory-picker-auto'
-  disabled: true
-
+# The in-box dual-face picker stays mounted. It owns the `directoryFlow` host
+# state that opens the flow slots and the `directoryPicker` Remote the dialog
+# calls; disabling it removes both, which is why the `+` button fell through to
+# the bare OS folder dialog. This bundle therefore only adds its own Host
+# registry and client surface. Its flow component shadows the built-in one by
+# priority (a `single` slot renders the lowest priority), so the multi-folder
+# dialog replaces the single-folder one without unmounting the provider.
 - insert:
-    - id: multi-workspace-directory-picker
-      name: '@deepseek-ai/dsh-host-directory-picker-native'
-
     - id: multi-workspace
       name: 'dsh-multi-workspace-host'
 

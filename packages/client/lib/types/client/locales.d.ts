@@ -17,6 +17,7 @@ export declare const zh: {
     setPrimary: string;
     removeProject: string;
     error: string;
+    newProject: string;
 };
 export type MultiWorkspaceKey = keyof typeof zh;
 export declare const en: {
@@ -38,4 +39,5 @@ export declare const en: {
     setPrimary: string;
     removeProject: string;
     error: string;
+    newProject: string;
 };

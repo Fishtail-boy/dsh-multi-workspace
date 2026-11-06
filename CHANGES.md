@@ -73,3 +73,56 @@ names.
 `packages/client/src/client/MultiWorkspaceFlow.tsx` — the `useWorkspaces`
 selector parameter is annotated, so `tsc` exits clean instead of emitting under
 `noImplicitAny`.
+
+
+## 8. DSH 0.2.2-rc.1 compatibility
+
+DSH auto-updated to **0.2.2-rc.1**, which changed three things this plugin relied on.
+
+### 8.1 Rebuilt against 0.2.2-rc.1
+
+All `@deepseek-ai/*` dev dependencies and the vendored client-bundle preset under
+`vendor/dsh-build/` now come from the `dsh-v0.2.2-rc.1` tag. The preset gained
+dependencies (`modules/src/assets.ts` and friends), so the vendored tree mirrors
+the new import graph.
+
+### 8.2 `sandboxPolicy.registerAdditionalWritableRoots` is gone
+
+0.2.2 removed the runtime writable-root API: the sandbox derives its writable set
+from static configuration (`additionalWritableRoots` on the sandbox row) at boot.
+The plugin now feature-detects the method and logs that attached folders stay
+**read-only** instead of failing. The model still sees them through the injected
+context and can read them by absolute path; writes land in the primary folder.
+
+### 8.3 `workspaceRegistry.setPath` is gone
+
+Renamed or dropped, so pointing the native workspace at the chosen primary folder
+no longer has a stable entry point. `MultiWorkspaceRegistry.setWorkspacePath`
+probes `setPath` → `updatePath` → `setRootPath` → `movePath` →
+`setPrimaryPath` and, when none exists, saves the mapping anyway and leaves the
+native root as the primary folder.
+
+### 8.4 Client: how the dialog finally takes over
+
+Two failures were fixed together:
+
+- **Slot rendering.** The built-in single-folder flow registers into
+  `sidebar.workspaces.directoryFlow` at the default priority; a `single` slot
+  renders the lowest priority, so registering at `-10` replaces that dialog while
+  `@deepseek-ai/dsh-host-directory-picker-auto` stays mounted (it owns both the
+  picker capability and the `directoryFlow` occupancy source — disabling it makes
+  the `+ ` button fall through to a bare OS folder dialog).
+- **Reading the Remote namespace.** cordis refuses to read
+  `ctx.remote.<namespace>` from a context that did not inject it, so the calls go
+  through the scoped context captured by
+  `ctx.inject(['remote.multiWorkspace'], …)` — registered separately and
+  non-blocking, so a late namespace never blocks plugin activation.
+
+The folder chooser itself is resolved at call time: the Electron preload bridge
+`__DSH_DIRECTORY_PICKER__.pick()` first, then the injected `workspaces` service.
+
+### 8.5 Extra menu entry
+
+The workspace row menu gains **New multi-folder project…** next to **Edit
+project**, both cloned from the Host's own rename row (the menu has no plugin
+slot).
